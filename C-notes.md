@@ -361,28 +361,67 @@ int max_index = 0;
     return 0;
 
 ----
-## Day 4.3/5 – 
+## Day 5 – Opening 2 files + merging them into new 1 file
 
 
 ✅ Worked
-- 
--
+- fprintf(z, "\n--- END OF PART 1 ---\n");  --> perhaps decenrly inserts stuff inside of new file whenever is applicable 
+-size_t bytes --> size_t applicable for any computer if you don't know how many bytes will be processed (avoiding overflow)
 
 ❌ Failed
--
+-fwrite (buffer, 1, bytes, z) --> bytes must be determined previously via fread or it will likely insert some garbage values 
 -
 
 💡 Insight
-- 
--
+- fread returns 0 if 0 bytes are left ; fgetc returns -1 if no characters are left
+-fread, fwrite for some chunks of data ; fgetc, fputc for indivudual character-by-character
 
 🔄 To Review
-- 
--
+- Exercises tomorrow to be done on this topic 
+-Loops, small stuff = int ; raw binary formats(audio, image, network bytes) = uint_8, int16_t, int32_t, int64_t; file sizes, memory sizes = size_t
 
 🧩 Code Snippets
 
--
+#1 = reading file x -> filling array buffer with raw data up to size of buffer -> fread will return number of succesful read -> bytes will remember that number -> loop will be stopped once fread returns 0 (nothing to read)
+-while  ((bytes = fread(buffer, 1, sizeof(buffer), x)) > 0)
+
+    {
+        fwrite(buffer, 1, bytes, z); 
+    }
+--> fwrite will copy actual data of array buffer into new file z
+
+
+#2
+-int stuff;  // fgetc = reading,storing character by character
+    while ((stuff = fgetc(x)) != EOF)
+    {
+        fputc(stuff, y); //copying stuff into new file
+    }
+
+- int counter[256] = {0}; // one slot for each possible ASCII character
+    int c;
+
+while ((c = fgetc(x)) != EOF)
+    {
+        counter[c]++;  // increment count for this character
+    }
+
+    fclose(x);
+
+-"to clip peaks in audio file" -> 
+int16_t sample;
+    while (fread(&sample, sizeof(int16_t), 1, x) == 1)
+    {
+        float temp = sample * factor;
+
+        // Clamp to int16_t range
+        if (temp > 32767) temp = 32767;
+        if (temp < -32768) temp = -32768;
+
+        sample = (int16_t)temp;
+        fwrite(&sample, sizeof(int16_t), 1, y);
+    }
+
 
 ----
 
