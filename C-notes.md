@@ -361,7 +361,7 @@ int max_index = 0;
     return 0;
 
 ----
-## Day 5 – Opening 2 files + merging them into new 1 file
+## Day 5 – Basic operations with files (part 1)
 
 
 ✅ Worked
@@ -425,9 +425,97 @@ int16_t sample;
 
 ----
 
+## Day 6 – Basic operations with files (part 2)
 
 
+✅ Worked
+- using while loop + fread, fgetc / fwrite, fputc to basically copy and paste data from file 1 to file 2
+-
 
+❌ Failed
+-Used if (counter[i] >= 32 || counter [i] <= 126) 
+Wrong -> because it just looking for frequences. It will likely be 0 always. It doesn't directly relates to ASCII values which what I was looking for. 
+
+Correct: 
+int total = 0; 
+    for (int i = 0; i < 256; i++) // can be used for(int i =32; i<= 126; i++)
+    {
+        if (counter [i] > 0)
+        {
+            if (i >= 32 && i <= 126) // counter 
+        {
+            total += counter[i]; 
+        }
+        }
+        
+    }
+-
+
+💡 Insight
+- perhaps use $unsigned char$ --> for working with some raw binary data (where data is unkown)  //If you know the file stores 16-bit samples, then it makes sense to read into int16_t or uint16_t.
+-fprintf(z, "\n--- END OF PART 1 ---\n"); --> works fine with text files but will corrupt WAV, JPEG
+
+🔄 To Review
+-
+-
+
+🧩 Code Snippets
+#To prevent wrapping the sound/distortion(if multiplicator is high enough)
+
+int16_t sample; 
+     int temp; 
+
+    while (fread(&sample , 1, sizeof(int16_t), x))
+    {
+        temp = (int)sample * factor; 
+
+        if (temp > 32767) 
+        {
+            temp = 32767;
+        }
+
+        if (temp < -32768) 
+        {
+            temp = -32768;
+        }
+
+        sample = (int16_t) temp; 
+        fwrite(&sample, 1, sizeof(int16_t), y); 
+    }
+
+####Formula to read data from file 1 and paste it in file2####
+ uint16_t buffer [512]; //or unsigned char buffer[512]; 
+size_t bytes ; 
+while ((bytes = fread(buffer, 1, sizeof(buffer), y)) > 0)
+    {
+        fwrite(buffer, 1, bytes, z); 
+    }
+
+
+----
+
+## Day  – 
+
+
+✅ Worked
+- 
+-
+
+❌ Failed
+-
+-
+
+💡 Insight
+- 
+-
+
+🔄 To Review
+-
+-
+
+🧩 Code Snippets
+
+----
 
 
 
